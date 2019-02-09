@@ -12,6 +12,7 @@
  * the License.
  */
 
+const path = require('path');
 const chalk = require('chalk');
 const toMatchSchemaUnderTest = require('../../index').toMatchSchema;
 
@@ -129,6 +130,18 @@ describe('toMatchSchema', () => {
           expect(() => expect({ locale }).toMatchSchemaUnderTest(schema, ajvOptions))
             .toThrowErrorMatchingSnapshot();
         });
+      });
+    });
+  });
+
+  describe('definitions and references', () => {
+    it('should asynchronously load locally referenced schemas', async () => {
+      // eslint-disable-next-line global-require
+      const schemaWithRefs = require('./__fixtures__/schema-with-refs.json');
+
+      await expect({ foo: 1, bar: 'baz' }).toMatchSchemaUnderTest(schemaWithRefs, {
+        rootURI: 'http://example.com/schemas/',
+        rootDir: path.resolve(__dirname, '__fixtures__'),
       });
     });
   });

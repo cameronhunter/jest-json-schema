@@ -14,11 +14,10 @@
 
 const Ajv = require('ajv');
 const chalk = require('chalk');
-const merge = require('lodash/merge');
 const { matcherHint } = require('jest-matcher-utils');
 
 function toBeValidSchema(received, ajvOptions) {
-  const ajv = new Ajv(merge({ allErrors: true }, ajvOptions));
+  const ajv = new Ajv(Object.assign({}, { allErrors: true }, ajvOptions));
 
   const pass = ajv.validateSchema(received);
 

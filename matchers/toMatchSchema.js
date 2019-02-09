@@ -14,12 +14,10 @@
 
 const Ajv = require('ajv');
 const chalk = require('chalk');
-const merge = require('lodash/merge');
 const { matcherHint } = require('jest-matcher-utils');
+const loadSchema = require('./loadSchema');
 
-function toMatchSchema(received, schema, ajvOptions) {
-  const ajv = new Ajv(merge({ allErrors: true }, ajvOptions));
-  const validate = ajv.compile(schema);
+function createResult(validate, received) {
   const pass = validate(received);
 
   const message = pass
@@ -46,6 +44,31 @@ function toMatchSchema(received, schema, ajvOptions) {
     name: 'toMatchSchema',
     pass,
   };
+}
+
+function toMatchSchemaSync(received, schema, ajvOptions = {}) {
+  const ajv = new Ajv({
+    allErrors: true,
+    ...ajvOptions,
+  });
+
+  return createResult(ajv.compile(schema), received);
+}
+
+function toMatchSchemaAsync(received, schema, ajvOptions = {}) {
+  const ajv = new Ajv({
+    allErrors: true,
+    loadSchema: loadSchema(ajvOptions.rootURI, ajvOptions.rootDir),
+    ...ajvOptions,
+  });
+
+  return ajv.compileAsync(schema).then(validate => createResult(validate, received));
+}
+
+function toMatchSchema(received, schema, ajvOptions = {}) {
+  return ajvOptions.rootDir || ajvOptions.rootURI
+    ? toMatchSchemaAsync(received, schema, ajvOptions)
+    : toMatchSchemaSync(received, schema, ajvOptions);
 }
 
 module.exports = toMatchSchema;
