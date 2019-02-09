@@ -15,16 +15,7 @@
 const toMatchSchema = require('./matchers/toMatchSchema');
 const toBeValidSchema = require('./matchers/toBeValidSchema');
 
-const { expect } = global;
-
-const matchers = {
+module.exports = {
   toMatchSchema,
   toBeValidSchema,
 };
-
-/* istanbul ignore next */
-if (expect !== undefined) {
-  expect.extend(matchers);
-}
-
-module.exports = matchers;

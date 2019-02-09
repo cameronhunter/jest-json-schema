@@ -24,6 +24,19 @@ it('validates my json', () => {
 });
 ```
 
+Referenced schemas can be automatically fetched if you pass `rootURI` and
+`rootDir` options. Note that this makes the matcher asynchronous.
+
+```js
+it('auto-fetches referenced schemas', async () => {
+  const schemaWithRefs = require('./schema-with-refs.json');
+  await expect({ hello: 'world' }).toMatchSchema(schemaWithRefs, {
+    rootURI: 'http://my-domain.com/schema/',
+    rootDir: __dirname
+  });
+});
+```
+
 ### `toBeValidSchema([ajvOptions])`
 
 Validates that a schema is valid
@@ -51,7 +64,8 @@ $ npm install --save-dev jest-json-schema
 In any test file:
 
 ```js
-import 'jest-json-schema';
+import matchers from 'jest-json-schema';
+expect.extend(matchers);
 ```
 
 Or if you want it available for all test files then set it up the same way in a
