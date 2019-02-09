@@ -49,18 +49,16 @@ function createResult(validate, received) {
 function toMatchSchema(received, schema, options = {}) {
   const {
     async,
-    rootURI,
-    rootDir,
+    resolutions,
     ...ajvOptions
   } = options;
 
-  const loadSchema = async && (ajvOptions.loadSchema || createLoadSchema(rootURI, rootDir));
+  const loadSchema = async && (ajvOptions.loadSchema || createLoadSchema(resolutions));
 
   const ajv = new Ajv({
     allErrors: true,
-    loadSchema,
-    async,
     ...ajvOptions,
+    loadSchema,
   });
 
   return loadSchema

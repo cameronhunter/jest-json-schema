@@ -35,16 +35,17 @@ it('auto-fetches referenced schemas', async () => {
 });
 ```
 
-Local schemas will be loaded via the filesystem by providing `rootURI` and
-`rootDir` options, removing the need for them to be hosted at their schema URI.
+Local schemas will be loaded via the filesystem by providing a `resolutions`
+option, removing the need for them to be hosted at their schema URI.
 
 ```js
 it('auto-fetches referenced schemas', async () => {
   const schemaWithRefs = require('./schema-with-refs.json');
   await expect({ hello: 'world' }).toMatchSchema(schemaWithRefs, {
     async: true,
-    rootURI: 'http://my-domain.com/schema/',
-    rootDir: __dirname
+    resolutions: {
+      'http://my-domain.com/schema/': __dirname
+    }
   });
 });
 ```

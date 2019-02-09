@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://example.com/schemas/schema-with-defs.json",
+  "$id": "http://my-domain.com/schemas/schema-with-defs.json",
   "definitions": {
     "int": { "type": "integer" },
     "str": { "type": "string" }

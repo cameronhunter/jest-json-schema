@@ -11,7 +11,7 @@ const fixtures = path.join(__dirname, '__fixtures__');
 
 describe('loadSchema', () => {
   it('resolves local files', () => {
-    const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
+    const loadSchema = createLoadSchema({ 'http://my-domain.com/schema': fixtures });
 
     return expect(
       loadSchema('http://my-domain.com/schema/schema-with-defs.json')
@@ -19,7 +19,7 @@ describe('loadSchema', () => {
   });
 
   it('rejects local files that cannot be loaded', () => {
-    const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
+    const loadSchema = createLoadSchema({ 'http://my-domain.com/schema': fixtures });
 
     return expect(
       loadSchema('http://my-domain.com/schema/nonexistent-schema.json')

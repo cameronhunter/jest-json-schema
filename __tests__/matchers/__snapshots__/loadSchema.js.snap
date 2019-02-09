@@ -6,7 +6,7 @@ exports[`loadSchema rejects local files that cannot be loaded 1`] = `"Cannot fin
 
 exports[`loadSchema resolves local files 1`] = `
 Object {
-  "$id": "http://example.com/schemas/schema-with-defs.json",
+  "$id": "http://my-domain.com/schemas/schema-with-defs.json",
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": Object {
     "int": Object {

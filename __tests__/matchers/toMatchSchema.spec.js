@@ -141,8 +141,9 @@ describe('toMatchSchema', () => {
 
       await expect({ foo: 1, bar: 'baz' }).toMatchSchemaUnderTest(schemaWithRefs, {
         async: true,
-        rootURI: 'http://example.com/schemas/',
-        rootDir: path.resolve(__dirname, '__fixtures__'),
+        resolutions: {
+          'http://my-domain.com/schemas/': path.resolve(__dirname, '__fixtures__'),
+        },
       });
     });
   });

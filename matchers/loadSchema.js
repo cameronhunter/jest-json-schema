@@ -1,18 +1,19 @@
 const urlRelative = require('url-relative');
-const isRelative = require('is-relative-url');
 const fetch = require('node-fetch');
-const { resolve } = require('path');
+const path = require('path');
 
-module.exports = function createLoadSchema(rootURI, rootDir) {
-  const enableLocalFetching = Boolean(rootURI && rootDir);
-
+module.exports = function createLoadSchema(resolutions = {}) {
+  const entries = Object.entries(resolutions);
   return function loadSchema(uri) {
-    const path = enableLocalFetching ? urlRelative(rootURI, uri) : uri;
+    const localSource = entries.find(([rootURI]) => uri.startsWith(rootURI));
 
-    if (isRelative(path)) {
+    if (localSource) {
+      const [rootURI, rootDir] = localSource;
+      const relativePath = urlRelative(rootURI, uri);
+      const absolutePath = path.resolve(rootDir, relativePath);
       try {
         // eslint-disable-next-line global-require, import/no-dynamic-require
-        return Promise.resolve(require(resolve(rootDir, path)));
+        return Promise.resolve(require(absolutePath));
       } catch (e) {
         return Promise.reject(e);
       }
