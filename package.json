@@ -36,6 +36,7 @@
     "amex-jest-preset": "^5.0.0",
     "eslint": "^5.13.0",
     "eslint-config-amex": "^10.0.0",
-    "jest": "^24.1.0"
+    "jest": "^24.1.0",
+    "jest-serializer-path": "^0.1.15"
   }
 }
