@@ -31,7 +31,3 @@ Object {
   "type": "object",
 }
 `;
-
-exports[`loadSchema throws if there is no rootDir specified 1`] = `"Must define \\"rootDir\\" option"`;
-
-exports[`loadSchema throws if there is no rootURI specified 1`] = `"Must define \\"rootURI\\" option"`;

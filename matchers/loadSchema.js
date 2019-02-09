@@ -4,20 +4,10 @@ const fetch = require('node-fetch');
 const { resolve } = require('path');
 
 module.exports = function createLoadSchema(rootURI, rootDir) {
-  if (!rootURI && !rootDir) {
-    return undefined;
-  }
-
-  if (!rootURI) {
-    throw new Error('Must define "rootURI" option');
-  }
-
-  if (!rootDir) {
-    throw new Error('Must define "rootDir" option');
-  }
+  const enableLocalFetching = Boolean(rootURI && rootDir);
 
   return function loadSchema(uri) {
-    const path = urlRelative(rootURI, uri);
+    const path = enableLocalFetching ? urlRelative(rootURI, uri) : uri;
 
     if (isRelative(path)) {
       try {

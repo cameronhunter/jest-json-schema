@@ -10,16 +10,6 @@ jest.mock('node-fetch');
 const fixtures = path.join(__dirname, '__fixtures__');
 
 describe('loadSchema', () => {
-  it('throws if there is no rootURI specified', () => {
-    expect(() => createLoadSchema(undefined, __dirname)).toThrowErrorMatchingSnapshot();
-  });
-
-  it('throws if there is no rootDir specified', () => {
-    expect(() =>
-      createLoadSchema('http://my-domain.com/schema', undefined)
-    ).toThrowErrorMatchingSnapshot();
-  });
-
   it('resolves local files', () => {
     const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
 
@@ -37,7 +27,7 @@ describe('loadSchema', () => {
   });
 
   it('resolves remote files', () => {
-    const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
+    const loadSchema = createLoadSchema();
 
     fetch.mockImplementation(() => Promise.resolve({ ok: true, json: () => remoteSchema }));
 
@@ -47,7 +37,7 @@ describe('loadSchema', () => {
   });
 
   it('rejects if remote files cannot be fetched', () => {
-    const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
+    const loadSchema = createLoadSchema();
 
     fetch.mockImplementation(() => Promise.resolve({ ok: false }));
 

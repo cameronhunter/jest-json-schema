@@ -140,6 +140,7 @@ describe('toMatchSchema', () => {
       const schemaWithRefs = require('./__fixtures__/schema-with-refs.json');
 
       await expect({ foo: 1, bar: 'baz' }).toMatchSchemaUnderTest(schemaWithRefs, {
+        async: true,
         rootURI: 'http://example.com/schemas/',
         rootDir: path.resolve(__dirname, '__fixtures__'),
       });

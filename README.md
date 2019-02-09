@@ -24,13 +24,15 @@ it('validates my json', () => {
 });
 ```
 
-Referenced schemas can be automatically fetched if you pass `rootURI` and
-`rootDir` options. Note that this makes the matcher asynchronous.
+Referenced schemas will be automatically fetched if you use the `async` option.
+Local schemas can be loaded via the filesystem by providing `rootURI` and
+`rootDir` options.
 
 ```js
 it('auto-fetches referenced schemas', async () => {
   const schemaWithRefs = require('./schema-with-refs.json');
   await expect({ hello: 'world' }).toMatchSchema(schemaWithRefs, {
+    async: true,
     rootURI: 'http://my-domain.com/schema/',
     rootDir: __dirname
   });
