@@ -15,19 +15,25 @@ describe('loadSchema', () => {
   });
 
   it('throws if there is no rootDir specified', () => {
-    expect(() => createLoadSchema('http://my-domain.com/schema', undefined)).toThrowErrorMatchingSnapshot();
+    expect(() =>
+      createLoadSchema('http://my-domain.com/schema', undefined)
+    ).toThrowErrorMatchingSnapshot();
   });
 
   it('resolves local files', () => {
     const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
 
-    expect(loadSchema('http://my-domain.com/schema/schema-with-defs.json')).resolves.toMatchSnapshot();
+    return expect(
+      loadSchema('http://my-domain.com/schema/schema-with-defs.json')
+    ).resolves.toMatchSnapshot();
   });
 
   it('rejects local files that cannot be loaded', () => {
     const loadSchema = createLoadSchema('http://my-domain.com/schema', fixtures);
 
-    expect(loadSchema('http://my-domain.com/schema/nonexistent-schema.json')).rejects.toThrowErrorMatchingSnapshot();
+    return expect(
+      loadSchema('http://my-domain.com/schema/nonexistent-schema.json')
+    ).rejects.toThrowErrorMatchingSnapshot();
   });
 
   it('resolves remote files', () => {
@@ -35,7 +41,9 @@ describe('loadSchema', () => {
 
     fetch.mockImplementation(() => Promise.resolve({ ok: true, json: () => remoteSchema }));
 
-    expect(loadSchema('http://not-my-domain.com/remote-schema.json')).resolves.toMatchSnapshot();
+    return expect(
+      loadSchema('http://not-my-domain.com/remote-schema.json')
+    ).resolves.toMatchSnapshot();
   });
 
   it('rejects if remote files cannot be fetched', () => {
@@ -43,6 +51,8 @@ describe('loadSchema', () => {
 
     fetch.mockImplementation(() => Promise.resolve({ ok: false }));
 
-    expect(loadSchema('http://not-my-domain.com/remote-schema.json')).rejects.toThrowErrorMatchingSnapshot();
+    return expect(
+      loadSchema('http://not-my-domain.com/remote-schema.json')
+    ).rejects.toThrowErrorMatchingSnapshot();
   });
 });
