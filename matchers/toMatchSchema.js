@@ -15,7 +15,7 @@
 const Ajv = require('ajv');
 const chalk = require('chalk');
 const { matcherHint } = require('jest-matcher-utils');
-const loadSchema = require('./loadSchema');
+const createLoadSchema = require('./loadSchema');
 
 function createResult(validate, received) {
   const pass = validate(received);
@@ -46,29 +46,14 @@ function createResult(validate, received) {
   };
 }
 
-function toMatchSchemaSync(received, schema, ajvOptions = {}) {
-  const ajv = new Ajv({
-    allErrors: true,
-    ...ajvOptions,
-  });
+function toMatchSchema(received, schema, options = {}) {
+  const { rootURI, rootDir, ...ajvOptions } = options;
+  const loadSchema = ajvOptions.loadSchema || createLoadSchema(rootURI, rootDir);
+  const ajv = new Ajv({ allErrors: true, loadSchema, ...ajvOptions });
 
-  return createResult(ajv.compile(schema), received);
-}
-
-function toMatchSchemaAsync(received, schema, ajvOptions = {}) {
-  const ajv = new Ajv({
-    allErrors: true,
-    loadSchema: loadSchema(ajvOptions.rootURI, ajvOptions.rootDir),
-    ...ajvOptions,
-  });
-
-  return ajv.compileAsync(schema).then(validate => createResult(validate, received));
-}
-
-function toMatchSchema(received, schema, ajvOptions = {}) {
-  return ajvOptions.rootDir || ajvOptions.rootURI
-    ? toMatchSchemaAsync(received, schema, ajvOptions)
-    : toMatchSchemaSync(received, schema, ajvOptions);
+  return loadSchema
+    ? ajv.compileAsync(schema).then(validate => createResult(validate, received))
+    : createResult(ajv.compile(schema), received);
 }
 
 module.exports = toMatchSchema;

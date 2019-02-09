@@ -4,6 +4,10 @@ const fetch = require('node-fetch');
 const { resolve } = require('path');
 
 module.exports = function createLoadSchema(rootURI, rootDir) {
+  if (!rootURI && !rootDir) {
+    return undefined;
+  }
+
   if (!rootURI) {
     throw new Error('Must define "rootURI" option');
   }
